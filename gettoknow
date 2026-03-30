@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hey 😊</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+.container {
+  text-align: center;
+  animation: fadeIn 1.5s ease;
+  padding: 10px;
+}
+
+h1, h2, p {
+  line-height: 1.4;
+  margin: 5px 0;
+}
+
+/* Font sizes for PC */
+h1 { font-size: 2.2rem; }
+p  { font-size: 1.2rem; }
+h2 { font-size: 1.5rem; }
+
+.buttons { margin-top: 20px; }
+
+button {
+  padding: 12px 25px;
+  margin: 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+/* YES */
+#yes {
+  background: #ff4d6d;
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+#yes:hover { transform: scale(1.1); }
+#yes:active { transform: scale(0.95); }
+
+/* NO */
+#no {
+  background: #ddd;
+}
+
+#no:hover { background: #ccc; }
+#no:active { transform: scale(0.9); }
+
+/* MOBILE */
+@media (max-width: 600px) {
+  h1 { font-size: 1.6rem; }
+  p  { font-size: 1rem; }
+  h2 { font-size: 1.3rem; }
+  button {
+    font-size: 16px;
+    padding: 10px 18px;
+    max-width: 80%; /* limit width so button won't wrap */
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.heart {
+  position: absolute;
+  animation: float 4s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(100vh); opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="main">
+  <h1>Hey Wedad 😊</h1>
+  <p>I wanted to make you smile today 😊</p>
+  <p>You seem really awesome and fun 💖</p>
+  <p>I’d love to get to know you more 😄</p>
+  <h2>Can I get to know you?</h2>
+
+  <div class="buttons">
+    <button id="yes" onclick="sayYes()">Sure 😊</button>
+    <button id="no" onclick="moveNo()">Not sure 😅</button>
+  </div>
+</div>
+
+<script>
+let step = 0;
+const texts = [
+  "Are you sure? 😅",
+  "Really sure? 😄",
+  "Promise? 🥺",
+  "Just a little yes? 😆",
+  "I won’t bite 😄",
+  "Let’s try? 😊",
+  "Last chance 😏"
+];
+
+const btn = document.getElementById('no');
+
+function moveNo() {
+  if (step < texts.length) {
+    btn.innerText = texts[step];
+  }
+
+  // Step 7 – first click moves the button immediately
+  if (step === texts.length - 1) {
+    moveButtonRandomly(btn);
+
+    if (!('ontouchstart' in window)) {
+      // PC: hover moves button
+      btn.addEventListener('mouseover', () => moveButtonRandomly(btn));
+    } else {
+      // MOBILE: touchend for safe tapping
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault(); // prevent accidental Yes click
+        moveButtonRandomly(btn);
+      });
+    }
+  }
+
+  step++;
+}
+
+// Function to move randomly with mobile Y limit
+function moveButtonRandomly(btn) {
+  const x = Math.random() * (window.innerWidth - btn.offsetWidth - 20);
+  const yMax = window.innerHeight - btn.offsetHeight - 20;
+  let y;
+
+  if (window.innerWidth <= 600) {
+    // MOBILE: limit Y to 70% of screen height
+    y = Math.random() * (yMax * 0.7);
+  } else {
+    y = Math.random() * yMax;
+  }
+
+  btn.style.position = 'absolute';
+  btn.style.left = x + 'px';
+  btn.style.top = y + 'px';
+}
+
+function sayYes() {
+  const gifURL = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHJlam9pcnppOTd2bzd6ZXZyb2owdjNkZW0wMWVza2JxZmxleGdjOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gPKXsLUHCCTZQKvPJf/giphy.gif";
+
+  document.getElementById('main').innerHTML = `
+    <div style="animation: fadeIn 1s ease;">
+      <img src="${gifURL}" style="max-width:90%; border-radius:20px;">
+    </div>
+  `;
+
+  for (let i = 0; i < 25; i++) createHeart();
+}
+
+function createHeart() {
+  const heart = document.createElement('div');
+  heart.classList.add('heart');
+  heart.innerHTML = '';
+  heart.style.left = Math.random() * 100 + 'vw';
+  heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+  document.body.appendChild(heart);
+
+  setTimeout(() => heart.remove(), 4000);
+}
+</script>
+
+</body>
+</html>
